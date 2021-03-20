@@ -1,7 +1,8 @@
 const express = require('express');
-const { check, validationResult } = require('express-validator');
+const {check, validationResult} = require('express-validator');
 const router = express.Router();
 const config = require('config');
+
 const Todo = require('../models/Todo');
 
 //@route    GET api/todos
@@ -25,22 +26,27 @@ router.get('/', async (req, res) => {
 
 router.post(
     '/',
-    check('title', 'Title is required').not().isEmpty(),
+    [
+        check('title', 'Title is required').not().isEmpty(),
+    ],
     async (req, res) => {
-        const errors = validationResult(req)
+        const errors = validationResult(req);
         if (!errors.isEmpty()) {
-            console.log(errors)
-          return res.status(400).json({ errors: errors.array() })
+          return res.status(400).json({errors: errors.array()});
         }
-       const { title, description } = req.body;
+
+        const { title, description, checked, date } = req.body;
         try {
             const newTodo = new Todo({
                 title,
-                description
+                description,
+                checked,
+                date
             });
-            
-            let todo = await newTodo.save();
+
+            const todo = await newTodo.save();
             res.json(todo);
+            console.log(result.response.data)
         } catch (err) {
             console.error(err.message);
             res.status(500).send('Server error');
@@ -61,9 +67,9 @@ router.put('/:id', async (req, res) => {
     try {
         let todo = await Todo.findById(req.params.id);
 
-        if(!todo) return res.status(404).json({ msg: "Todo not found"});
+        if (!todo) return res.status(404).json({ msg: "Todo not found" });
 
-        todo = await Todo.findByIdAndUpdate(req.params.id, 
+        todo = await Todo.findByIdAndUpdate(req.params.id,
             { $set: todoFields },
             { new: true }
         );
@@ -82,7 +88,7 @@ router.delete('/:id', async (req, res) => {
     try {
         let todo = await Todo.findById(req.params.id);
 
-        if(!todo) return res.status(404).json({ msg: "Todo not found"});
+        if (!todo) return res.status(404).json({ msg: "Todo not found" });
 
         await Todo.findByIdAndRemove(req.params.id);
 

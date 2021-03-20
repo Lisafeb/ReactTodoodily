@@ -3,9 +3,11 @@ import {
     DELETE_TODO,
     SET_TODO,
     UPDATE_TODO,
-    CLEAT_TODO,
+    CLEAR_TODO,
     SET_CURRENT,
-    CLEAR_CURRENT
+    CLEAR_CURRENT,
+    TODO_ERROR,
+    GET_TODOS
 } from '../types';
 
 export default (state, action) => {
@@ -13,17 +15,22 @@ export default (state, action) => {
         case ADD_TODO:
             return {
                 ...state,
-                todos: [...state.todos, action.payload]
+                todos: [action.payload, ...state.todos],
+                loading: false
             };
         case UPDATE_TODO:
             return {
                 ...state,
-                todos: state.todos.map(todo => todo.id === action.payload.id ? action.payload : todo)
+                todos: state.todos.map(todo => todo._id === action.payload._id ? action.payload : todo),
+                loading: false
             }
         case DELETE_TODO:
             return {
                 ...state,
-                todos: state.todos.filter(todo => todo.id !== action.payload)
+                todos: state.todos.filter(
+                    todo => todo._id !== action.payload
+                ),
+                loading: false
             }
         case SET_CURRENT:
             return {
@@ -35,7 +42,17 @@ export default (state, action) => {
                 ...state,
                 current: null
             }
-
+        case TODO_ERROR:
+            return {
+                ...state,
+                error: action.payload
+            }
+        case GET_TODOS:
+            return {
+                ...state,
+                todos: action.payload,
+                loading: false
+            }
         default:
             return state;
     }

@@ -6,10 +6,10 @@ const TodoItem = ({ todo }) => {
     const todoContext = useContext(TodoContext);
 
     const { deleteTodo, setCurrent, clearCurrent } = todoContext;
-    const {title, description, checked, id, date} = todo;
+    const {title, description, checked, _id, date} = todo;
 
     const onDelete = () => {
-        deleteTodo(id);
+        deleteTodo(_id);
         clearCurrent();
     }
 

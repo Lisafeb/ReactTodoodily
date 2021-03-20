@@ -1,5 +1,4 @@
 import React, { useReducer } from 'react';
-import { v4 as uuidv4 } from 'uuid';
 import TodoContext from './TodoContext';
 import todoReducer from './TodoReducer';
 import {
@@ -9,47 +8,80 @@ import {
     UPDATE_TODO,
     CLEAR_TODO,
     SET_CURRENT,
-    CLEAR_CURRENT
+    CLEAR_CURRENT,
+    TODO_ERROR,
+    GET_TODOS,
+    CLEAR_TODOS
 } from '../types';
+import axios from 'axios';
 
 const TodoState = props => {
     const initialState = {
-        todos: [
-            {
-                "checked": false,
-                "id": "3",
-                "title": "first",
-                "description": "some description",
-                "date": "2021-03-19T21:18:48.601Z"
-            },
-            {
-                "checked": true,
-                "id": "2",
-                "title": "second",
-                "description": "some description",
-                "date": "2021-03-19T21:18:49.601Z"
-            },
-            {
-                "checked": false,
-                "id": "1",
-                "title": "third",
-                "description": "some description",
-                "date": "2021-03-19T21:18:49.601Z"
-            }
-        ],
-        current: null
+        todos: null,
+        current: null,
+        error: null
     };
 
     const [state, dispatch] = useReducer(todoReducer, initialState);
 
     // ADD
-    const addTodo = todo => {
-        todo.id = uuidv4();
-        dispatch({ type: ADD_TODO, payload: todo });
+    const addTodo = async todo => {
+        const config = {
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        };
+        try {
+            const res = await axios.post('/api/todos', todo, config);
+            dispatch({
+                type: ADD_TODO,
+                payload: res.data
+            });
+        } catch (error) {
+            dispatch({
+                type: TODO_ERROR,
+                payload: error.response.msg
+            });
+        }
+    };
+
+    // UPDATE
+    const updateTodo = async todo => {
+        const config = {
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        };
+        try {
+            const res = await axios.put(`/api/todos/${todo._id}`, todo, config);
+            dispatch({
+                type: UPDATE_TODO,
+                payload: res.data
+            });
+        } catch (error) {
+            dispatch({
+                type: TODO_ERROR,
+                payload: error.response.msg
+            });
+        }
     }
+
     // DELETE
-    const deleteTodo = id => {
-        dispatch({ type: DELETE_TODO, payload: id });
+    const deleteTodo = async id => {
+        try {
+            axios.delete(`/api/todos/${id}`);
+
+            dispatch({ 
+                type: DELETE_TODO, 
+                payload: id 
+            });
+        } catch (error) {
+            dispatch({
+                type: TODO_ERROR,
+                payload: error.response.msg
+            });
+        }
+       
     }
     // SET
     const setCurrent = todo => {
@@ -59,20 +91,34 @@ const TodoState = props => {
     const clearCurrent = () => {
         dispatch({ type: CLEAR_CURRENT });
     }
-    // UPDATE
-    const updateTodo = todo => {
-        dispatch({ type: UPDATE_TODO, payload: todo });
+    
+    // GET ALL
+    const getTodos = async () => {
+        try {
+            const res = await axios.get('/api/todos');
+            dispatch({
+                type: GET_TODOS,
+                payload: res.data
+            });
+        } catch (error) {
+            dispatch({
+                type: TODO_ERROR,
+                payload: error.response.msg
+            });
+        }
     }
     return (
         <TodoContext.Provider
             value={{
                 todos: state.todos,
                 current: state.current,
+                error: state.error,
                 addTodo,
                 deleteTodo,
                 setCurrent,
                 clearCurrent,
-                updateTodo
+                updateTodo,
+                getTodos
             }}
         >
             { props.children}
