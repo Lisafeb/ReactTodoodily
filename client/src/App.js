@@ -12,13 +12,15 @@ function App() {
       <Router>
         <Fragment>
           <NavBar />
-          <div className="container">
-            <Switch>
-              <Route exact path='/' component={Home} />
-              <Route exact path='/about' component={About} />
-            </Switch>
-          </div>
-    </Fragment>
+          <div className="app">
+            <div className="container">
+              <h1 className="text-center mb-4">Todoodily</h1>
+              <Switch>
+                <Route exact path='/' component={Home} />
+                <Route exact path='/about' component={About} />
+              </Switch>
+            </div> </div> 
+            </Fragment>
       </Router>
     </TodoState>
   );

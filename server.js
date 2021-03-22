@@ -10,6 +10,7 @@ app.use(express.json({ extended: false }));
 app.get('/', (req, res) => res.json({msg: 'It is running!'}));
 
 app.use('/api/todos', require('./routes/todos'));
+app.use('/api/priority', require('./routes/priority'));
 
 const PORT = process.env.PORT || 5000;
 

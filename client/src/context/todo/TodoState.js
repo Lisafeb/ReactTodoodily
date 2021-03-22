@@ -11,7 +11,10 @@ import {
     CLEAR_CURRENT,
     TODO_ERROR,
     GET_TODOS,
-    CLEAR_TODOS
+    CLEAR_TODOS,
+    GET_PRIORITY,
+    UPDATE_PRIORITY,
+    PRIORITY_ERROR
 } from '../types';
 import axios from 'axios';
 
@@ -19,7 +22,8 @@ const TodoState = props => {
     const initialState = {
         todos: null,
         current: null,
-        error: null
+        error: null,
+        priority: null
     };
 
     const [state, dispatch] = useReducer(todoReducer, initialState);
@@ -32,11 +36,14 @@ const TodoState = props => {
             }
         };
         try {
-            const res = await axios.post('/api/todos', todo, config);
+         
+            const res = await axios.post('/api/todos', todo, config)
+            
             dispatch({
                 type: ADD_TODO,
                 payload: res.data
             });
+            return res.data
         } catch (error) {
             dispatch({
                 type: TODO_ERROR,
@@ -53,7 +60,7 @@ const TodoState = props => {
             }
         };
         try {
-            const res = await axios.put(`/api/todos/${todo._id}`, todo, config);
+            const res = await  axios.put(`/api/todos/${todo._id}`, todo, config);
             dispatch({
                 type: UPDATE_TODO,
                 payload: res.data
@@ -107,18 +114,59 @@ const TodoState = props => {
             });
         }
     }
+
+        
+    // GET PRIORITY ORDER
+    const getOrderOfItems = async () => {
+        try {
+            const res = await axios.get('/api/priority');
+            dispatch({
+                type: GET_PRIORITY,
+                payload: res.data[0].priority.priorityIds
+            });
+        } catch (error) {
+            dispatch({
+                type: PRIORITY_ERROR,
+                payload: error.response.msg
+            });
+        }
+    }
+
+        // UPDATE PRIORITY ORDER
+        const updateOrderOfItems = async priority => {
+            const config = {
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            };
+            try {
+                const res = await axios.put(`/api/priority/60589769e8026c0eecd6ddce`, priority, config);
+                dispatch({
+                    type: UPDATE_PRIORITY,
+                    payload: res.data.priority.priorityIds
+                });
+            } catch (error) {
+                dispatch({
+                    type: PRIORITY_ERROR,
+                    payload: error.response.msg
+                });
+            }
+        }
     return (
         <TodoContext.Provider
             value={{
                 todos: state.todos,
                 current: state.current,
                 error: state.error,
+                priority: state.priority,
                 addTodo,
                 deleteTodo,
                 setCurrent,
                 clearCurrent,
                 updateTodo,
-                getTodos
+                getTodos,
+                getOrderOfItems,
+                updateOrderOfItems
             }}
         >
             { props.children}

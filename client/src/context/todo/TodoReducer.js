@@ -7,7 +7,9 @@ import {
     SET_CURRENT,
     CLEAR_CURRENT,
     TODO_ERROR,
-    GET_TODOS
+    GET_TODOS,
+    GET_PRIORITY,
+    UPDATE_PRIORITY
 } from '../types';
 
 export default (state, action) => {
@@ -51,6 +53,18 @@ export default (state, action) => {
             return {
                 ...state,
                 todos: action.payload,
+                loading: false
+            };
+        case GET_PRIORITY:
+            return {
+                ...state,
+                priority: action.payload,
+                loading: false
+            }
+        case UPDATE_PRIORITY:
+            return {
+                ...state,
+                priority: action.payload,
                 loading: false
             }
         default:

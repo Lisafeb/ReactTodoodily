@@ -46,7 +46,6 @@ router.post(
 
             const todo = await newTodo.save();
             res.json(todo);
-            console.log(result.response.data)
         } catch (err) {
             console.error(err.message);
             res.status(500).send('Server error');
@@ -69,10 +68,9 @@ router.put('/:id', async (req, res) => {
 
         if (!todo) return res.status(404).json({ msg: "Todo not found" });
 
-        todo = await Todo.findByIdAndUpdate(req.params.id,
-            { $set: todoFields },
-            { new: true }
-        );
+        todo = await Todo.findByIdAndUpdate(req.params.id, req.body, {
+            new: true,
+          });
 
         res.json(todo);
     } catch (err) {

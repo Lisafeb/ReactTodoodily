@@ -10,5 +10,8 @@ export const CLEAR_CURRENT = 'CLEAR_CURRENT';
 export const TODO_ERROR = 'TODO_ERROR';
 export const GET_TODOS = 'GET_TODOS';
 export const CLEAR_TODOS = 'CLEAR_TODOS';
-
+export const CHECK_TODO = 'CHECK_TODO';
+export const GET_PRIORITY = 'GET_PRIORITY';
+export const PRIORITY_ERROR = 'PRIORITY_ERROR';
+export const UPDATE_PRIORITY = 'UPDATE_PRIORITY';
 

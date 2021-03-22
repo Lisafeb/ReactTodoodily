@@ -4,7 +4,7 @@ import TodoContext from '../../context/todo/TodoContext';
 const TodoForm = () => {
     const todoContext = useContext(TodoContext);
 
-    const { addTodo, clearCurrent, current, updateTodo } = todoContext;
+    const { todos, getTodos, addTodo, clearCurrent, current, updateTodo, updateOrderOfItems, priority } = todoContext;
 
     useEffect(() => {
         if (current !== null) {
@@ -16,11 +16,19 @@ const TodoForm = () => {
             })
         }
     }, [todoContext, current]);
+
     const [todo, setTodo] = useState({
         title: '',
         description: '',
         checked: ''
     });
+
+    const addNewItemToPriorityArray = (id) => {
+        const items = Array.from(priority);
+        items.push(id);
+        let object = { priority: { priorityIds: items } }
+        updateOrderOfItems(object);
+    }
 
     const { title, description, checked } = todo;
 
@@ -29,9 +37,10 @@ const TodoForm = () => {
     const onSubmit = e => {
         e.preventDefault();
         if (current === null) {
-            addTodo(todo);
+            addTodo(todo)
+                .then(response => addNewItemToPriorityArray(response._id))
         } else {
-           updateTodo(todo);
+            updateTodo(todo);
         }
         clearAll();
     }
@@ -41,7 +50,8 @@ const TodoForm = () => {
     }
     return (
         <form onSubmit={onSubmit}>
-            <h2 className="text-primary">{current ? 'Edit Todo' : 'Add Todo'}</h2>
+            <h2 className="text-dark">{current ? 'Edit Todo' : 'Add Todo'}</h2>
+            <label class="form-label"></label>
             <input
                 type='text'
                 placeholder='Title'
@@ -49,6 +59,7 @@ const TodoForm = () => {
                 value={title}
                 onChange={onChange}
             />
+            <label class="form-label"></label>
             <input
                 type='text'
                 placeholder='Add a description'
@@ -56,11 +67,12 @@ const TodoForm = () => {
                 value={description}
                 onChange={onChange}
             />
+            <label class="form-label"></label>
             <div>
                 <input
                     type='submit'
                     value={current ? 'Update Todo' : 'Add Todo'}
-                    className='btn btn-primary btn-block'
+                    className='btn btn-dark btn-block'
                 />
             </div>
             {current && <div>

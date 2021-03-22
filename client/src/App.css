@@ -19,7 +19,6 @@ body {
   font-family: 'Roboto', sans-serif;
   font-size: 1rem;
   line-height: 1.6;
-  background-color: #fff;
   color: #333;
 }
 
@@ -409,7 +408,7 @@ table th {
   .grid-2,
   .grid-3,
   .grid-4 {
-    grid-template-columns: 1fr;
+    grid-template-columns: 2fr;
   }
 
   /* Text Styles */
@@ -454,4 +453,19 @@ table th {
     opacity: 0;
     transition: opacity 500ms ease-in;
   }
+  .app {
+    padding: 30px;
+    background-color:  rgb(241, 240, 223);
+  }
+  
+  .todo {
+    align-items: center;
+    display: flex;
+    font-size: 18px;
+    justify-content: space-between;
+  }
+}
+.app {
+  padding: 30px;
+  background-color: rgb(241, 240, 223);
 }
