@@ -58,6 +58,7 @@ const TodoForm = () => {
                 name='title'
                 value={title}
                 onChange={onChange}
+                required={true}
             />
             <label class="form-label"></label>
             <input

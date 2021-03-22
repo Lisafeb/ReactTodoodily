@@ -32,7 +32,7 @@ const Todos = () => {
     }
     let priorityArray = []
     if (priority !== null && todos !== null && todos.length === 0 && !loading) {
-        return <h4>Please add a contact</h4>
+        return <h4>Add something new on your todo list</h4>
     }
 
     if (priority !== [] && priority !== null) {
