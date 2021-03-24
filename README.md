@@ -7,6 +7,11 @@ The app will display a form for submission of new todo items. The existing todo 
 
 The todos and their order are saved in MongoDB.
 
+<b> Install dependencies:</b>
+`npm install`
+`npm client-install`
+
+
 <b> Run the project:</b>
 
-Run `npm run dev` in the root folder
+Run `npm run dev` in the root folder (runs Express and React)
