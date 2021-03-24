@@ -4,7 +4,7 @@ import TodoContext from '../../context/todo/TodoContext';
 const TodoForm = () => {
     const todoContext = useContext(TodoContext);
 
-    const { todos, getTodos, addTodo, clearCurrent, current, updateTodo, updateOrderOfItems, priority } = todoContext;
+    const { addTodo, clearCurrent, current, updateTodo, updateOrderOfItems, priority } = todoContext;
 
     useEffect(() => {
         if (current !== null) {
